@@ -1,0 +1,38 @@
+#!/bin/bash
+
+progname=`basename $0`
+
+if [ $# -ne 1 ]
+then
+    echo "usage: $progname <build dir>"
+    exit 1
+fi
+
+build_dir="$1"
+
+. ./bin/common
+
+check_exported PGHOST PGUSER PGPASSWORD
+check_var project_name db_name
+
+check_tomcat
+
+echo "--- cleaning data dir..."
+rm -rf $data_dir
+
+echo "--- cleaning xnat dir..."
+rm -rf $xnat_dir
+
+echo "--- cleaning log dir..."
+rm -rf $log_dir
+
+echo "--- removing webapp..."
+rm -rf $TOMCAT_HOME/webapps/$project_name
+
+echo "--- dropping database..."
+# || true to avoid the bash -e exit if the database doesn't exist
+dropdb $db_name 2> /dev/null || true
+
+exit 0
+
+# eof

@@ -1,0 +1,102 @@
+check_exported()
+{
+
+    for var in $*
+    do
+        if [ `export -p | tr = ' ' | awk -v var=$var '$3==var' | wc -l` -ne 1 ]
+        then
+            echo "$progname: $var is not set or exported" >&2
+            return 1
+        fi
+    done
+
+    return 0
+
+} # end check_exported()
+
+check_var()
+{
+
+    for var in $*
+    do
+        if [ -z "${!var}" ]
+        then
+            echo "$progname: $var is not set" >&2
+            return 1
+        fi
+    done
+
+    return 0
+
+} # end check_var()
+
+check_tomcat()
+{
+
+    if ps -ef | grep -i java | grep -i catalina > /dev/null
+    then
+        echo "$progname: tomcat appears to be running" >&2
+        return 1
+    fi
+
+    return 0
+
+} # end check_tomcat()
+
+download()
+{
+
+    local fname="$1"
+    local md5_fname="${fname}.md5"
+    local sum
+    local calc_sum
+
+    if [ $fname = "xnat-maven.zip" ]
+    then
+        sum=8fbf64cd3da29e25efdfcb2ef8495504
+    else
+        curl -sS -o /tmp/$md5_fname ${xnat_repo}/$md5_fname || return 1
+        sum=`awk '{print $1}' /tmp/$md5_fname`
+    fi
+
+    if [ ! -f /tmp/$fname ]
+    then
+        curl -sS -o /tmp/$fname ${xnat_repo}/$fname || return 1
+    fi
+
+    calc_sum=`md5sum /tmp/$fname | awk '{print $1}'`
+
+    if [ $calc_sum != $sum ]
+    then
+        echo "$progname: checksum error downloading $fname" >&2
+        return 1
+    fi
+
+    echo /tmp/$fname
+
+    return 0
+
+} # end download()
+
+# defaults
+xnat_repo=ftp://ftp.nrg.wustl.edu/pub/xnat/
+data_dir="$build_dir/data"
+mail_admin=administrator@xnat.org
+mail_prefix=XNAT
+require_login=false
+enable_new_registrations=false
+security_channel=any
+enable_csrf_token=true
+
+. "$build_dir/config"
+
+# default, but requires another variable
+if [ -z "$xnat_url" ]
+then
+    xnat_url=http://localhost:8080/$project_name
+fi
+
+log_dir="$build_dir/log"
+xnat_dir="$build_dir/xnat"
+
+# eof
