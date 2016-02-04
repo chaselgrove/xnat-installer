@@ -72,6 +72,12 @@ then
     exit 1
 fi
 
+if [ -z "XNAT_INSTALLER_DIR" ]
+then
+    echo "$progname: XNAT_INSTALLER_DIR is not set"
+    exit 1
+fi
+
 getopt_results=`getopt -n $progname -o v -- "$@"`
 if [ $? -ne 0 ] ; then exit 1 ; fi
 eval set -- "$getopt_results"
@@ -110,9 +116,7 @@ fi
 
 # ------------------------------------------------------------------
 
-# use $BASH_SOURCE to get the full path to the executable (and use that 
-# to find common)
-. `dirname ${BASH_SOURCE[0]}`/common
+. $XNAT_INSTALLER_DIR/bin/common
 
 check_exported PGHOST PGUSER PGPASSWORD JAVA_HOME
 check_var xnat_version TOMCAT_HOME project_name db_name
@@ -135,7 +139,7 @@ then
     exit 1
 fi
 
-conf_dir="conf/$xnat_version"
+conf_dir="$XNAT_INSTALLER_DIR/conf/$xnat_version"
 if [ ! -d "$conf_dir" ]
 then
     echo "$progname: unsupported XNAT version \"$xnat_version\"" >&2

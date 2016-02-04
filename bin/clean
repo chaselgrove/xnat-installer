@@ -8,11 +8,15 @@ then
     exit 1
 fi
 
+if [ -z "XNAT_INSTALLER_DIR" ]
+then
+    echo "$progname: XNAT_INSTALLER_DIR is not set"
+    exit 1
+fi
+
 build_dir="$1"
 
-# use $BASH_SOURCE to get the full path to the executable (and use that 
-# to find common)
-. `dirname ${BASH_SOURCE[0]}`/common
+. $XNAT_INSTALLER_DIR/bin/common
 
 check_exported PGHOST PGUSER PGPASSWORD
 check_var project_name db_name
