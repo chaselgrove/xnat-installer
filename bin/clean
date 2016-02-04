@@ -10,7 +10,9 @@ fi
 
 build_dir="$1"
 
-. ./bin/common
+# use $BASH_SOURCE to get the full path to the executable (and use that 
+# to find common)
+. `dirname ${BASH_SOURCE[0]}`/common
 
 check_exported PGHOST PGUSER PGPASSWORD
 check_var project_name db_name
