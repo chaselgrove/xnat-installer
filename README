@@ -1,1 +1,8 @@
 XNAT installer
+
+tested on Ubuntu 14.0.3 LTS with:
+
+    tomcat7
+    postgresql-9.3
+    openjdk-7-jdk
+    openjdk-7-jre
