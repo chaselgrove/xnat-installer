@@ -16,7 +16,7 @@ fi
 
 build_dir="$1"
 
-. $XNAT_INSTALLER_DIR/bin/common
+. $XNAT_INSTALLER_DIR/lib/common
 
 check_exported PGHOST PGUSER PGPASSWORD
 check_var project_name db_name
