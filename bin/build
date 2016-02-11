@@ -67,7 +67,9 @@ then
     echo
     echo "options are:"
     echo
-    echo "    -v verbose"
+    echo "    -v -- verbose"
+    echo
+    echo "    -V <file> -- send verbose output to a file"
     echo
     exit 1
 fi
@@ -78,18 +80,25 @@ then
     exit 1
 fi
 
-getopt_results=`getopt -n $progname -o v -- "$@"`
+getopt_results=`getopt -n $progname -o vV: -- "$@"`
 if [ $? -ne 0 ] ; then exit 1 ; fi
 eval set -- "$getopt_results"
 
-verbose_flag=
+verbose_file=
 
 while [ "$1" ]
 do
 
     if [ "$1" = "-v" ]
     then
-        verbose_flag=1
+        verbose_file=-
+        shift
+    fi
+
+    if [ "$1" = "-V" ]
+    then
+        shift
+        verbose_file="$1"
         shift
     fi
 
@@ -107,11 +116,14 @@ done
 build_dir=`readlink -f "$1"`
 
 # build commands' output is sent to log files and also to file 3
-if [ $verbose_flag ]
+if [ -z "$verbose_file" ]
+then
+    exec 3> /dev/null
+elif [ "$verbose_file" = - ]
 then
     exec 3>&1
 else
-    exec 3> /dev/null
+    exec 3>> "$verbose_file"
 fi
 
 # ------------------------------------------------------------------
