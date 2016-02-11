@@ -10,6 +10,6 @@ project_name=xnat-1.6.4
 db_name=xnat164
 mail_prefix=XNAT-1.6.4
 
-xnat_repo=file:///tmp/xnat_source
+xnat_repo=file:///media/sf_xnat
 
 # eof
