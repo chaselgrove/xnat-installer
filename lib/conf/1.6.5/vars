@@ -1,0 +1,8 @@
+project_name
+site_title
+mail_admin=administrator@xnat.org
+require_login=false
+enable_new_registrations=false
+security_channel=any
+enable_csrf_token=true
+xnat_url=http://localhost:8080/$project_name

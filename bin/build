@@ -208,8 +208,6 @@ do
 done
 echo
 
-exit 2
-
 echo "--- setting up build..."
 
 mkdir "$log_dir"
@@ -228,7 +226,10 @@ source_fname=`download $source`
 echo "--- extracting source..."
 
 tar zxvf $source_fname --strip 1 -C $xnat_dir >&3
-rsync -av $conf_dir/xnat/ $xnat_dir/ >&3
+if [ -d "$conf_dir/xnat" ]
+then
+    rsync -av "$conf_dir/xnat/" $xnat_dir/ >&3
+fi
 create_build_properties $conf_dir $xnat_dir
 
 echo "--- creating database..."
