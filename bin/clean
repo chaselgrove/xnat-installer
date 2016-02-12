@@ -18,22 +18,25 @@ build_dir="$1"
 
 . $XNAT_INSTALLER_DIR/lib/common
 
-check_exported PGHOST PGUSER PGPASSWORD
-check_var project_name db_name
+check_exported PGHOST PGUSER PGPASSWORD || exit 1
+check_vars project_name db_name || exit 1
 
 check_tomcat
 
 echo "--- cleaning data dir..."
-rm -rf $data_dir
+rm -rf "$data_dir"
 
 echo "--- cleaning xnat dir..."
-rm -rf $xnat_dir
+rm -rf "$xnat_dir"
 
 echo "--- cleaning log dir..."
-rm -rf $log_dir
+rm -rf "$log_dir"
+
+echo "--- removing defaults..."
+rm -f "$build_dir/vars"
 
 echo "--- removing webapp..."
-rm -rf $TOMCAT_HOME/webapps/$project_name
+rm -rf "$TOMCAT_HOME/webapps/$project_name"
 
 echo "--- dropping database..."
 # || true to avoid the bash -e exit if the database doesn't exist

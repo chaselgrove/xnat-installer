@@ -20,6 +20,7 @@ create_build_properties()
 
     cat $build_dir/build.properties.template \
         | sed "s|%data_dir%|$data_dir|" \
+        | sed "s|%site_title%|$site_title|" \
         | sed "s|%db_name%|$db_name|" \
         | sed "s|%enable_csrf_token%|$enable_csrf_token|" \
         | sed "s|%enable_new_registrations%|$enable_new_registrations|" \
@@ -131,7 +132,7 @@ fi
 . $XNAT_INSTALLER_DIR/lib/common
 
 check_exported PGHOST PGUSER PGPASSWORD JAVA_HOME
-check_var xnat_version TOMCAT_HOME project_name db_name
+check_vars xnat_version TOMCAT_HOME db_name
 
 if [ -d $log_dir ]
 then
@@ -160,6 +161,20 @@ fi
 
 . "$conf_dir/config"
 
+# check for variables with no defaults
+check_vars `grep -v = "$conf_dir/vars"`
+
+# apply defaults
+touch "$build_dir/vars"
+grep = "$conf_dir/vars" | sed 's/=/ /' | while read var value
+do
+    if [ -z "${!var}" ]
+    then
+        echo "$var=$value" >> "$build_dir/vars"
+    fi
+done
+. "$build_dir/vars"
+
 if ! n_db=`check_db`
 then
     echo "$progname: could not connect to database" >&2
@@ -183,19 +198,17 @@ echo "    PGUSER = $PGUSER"
 echo "    PGPASSWORD = $PGPASSWORD"
 echo "    JAVA_HOME = $JAVA_HOME"
 echo "    xnat_version = $xnat_version"
-echo "    TOMCAT_HOME = $TOMCAT_HOME"
-echo "    project_name = $project_name"
-echo "    db_name = $db_name"
 echo "    xnat_repo = $xnat_repo"
+echo "    TOMCAT_HOME = $TOMCAT_HOME"
+echo "    db_name = $db_name"
 echo "    data_dir = $data_dir"
-echo "    xnat_url = $xnat_url"
-echo "    mail_admin = $mail_admin"
-echo "    mail_prefix = $mail_prefix"
-echo "    require_login = $require_login"
-echo "    enable_new_registrations = $enable_new_registrations"
-echo "    security_channel = $security_channel"
-echo "    enable_csrf_token = $enable_csrf_token"
+for var in `awk -F= '{print $1}' "$conf_dir/vars"`
+do
+    echo "    $var = ${!var}"
+done
 echo
+
+exit 2
 
 echo "--- setting up build..."
 

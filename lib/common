@@ -14,7 +14,7 @@ check_exported()
 
 } # end check_exported()
 
-check_var()
+check_vars()
 {
 
     for var in $*
@@ -28,7 +28,7 @@ check_var()
 
     return 0
 
-} # end check_var()
+} # end check_vars()
 
 check_tomcat()
 {
@@ -80,20 +80,8 @@ download()
 # defaults
 xnat_repo=ftp://ftp.nrg.wustl.edu/pub/xnat/
 data_dir="$build_dir/data"
-mail_admin=administrator@xnat.org
-mail_prefix=XNAT
-require_login=false
-enable_new_registrations=false
-security_channel=any
-enable_csrf_token=true
 
 . "$build_dir/config"
-
-# default, but requires another variable
-if [ -z "$xnat_url" ]
-then
-    xnat_url=http://localhost:8080/$project_name
-fi
 
 log_dir="$build_dir/log"
 xnat_dir="$build_dir/xnat"
