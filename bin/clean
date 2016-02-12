@@ -21,7 +21,7 @@ build_dir="$1"
 check_exported PGHOST PGUSER PGPASSWORD || exit 1
 check_vars project_name db_name || exit 1
 
-check_tomcat
+check_tomcat || exit 1
 
 echo "--- cleaning data dir..."
 rm -rf "$data_dir"
