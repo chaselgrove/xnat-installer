@@ -244,7 +244,7 @@ if [ $extract_maven ]
 then
     echo "--- unpacking maven JARs..."
     maven_fname=`download xnat-maven.zip`
-    (cd ; unzip $maven_fname) >&3
+    (cd ; unzip -o $maven_fname) >&3
 fi
 
 echo "--- getting source..."
