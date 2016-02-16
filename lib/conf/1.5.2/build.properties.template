@@ -37,7 +37,7 @@ xdat.build.location=%data_dir%/build
 xdat.smtp.server=localhost
 
 #email address of administrator.
-xdat.admin_email=christian.haselgrove@umassmed.edu
+xdat.admin_email=%mail_admin%
 
 # eg. http://localhost:8080.xnat
 xdat.url=%xnat_url%
