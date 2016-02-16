@@ -57,6 +57,28 @@ psql_()
 
 } # end psql_()
 
+dump_parameters()
+{
+
+    echo "PGHOST = $PGHOST"
+    echo "PGUSER = $PGUSER"
+    echo "PGPASSWORD = $PGPASSWORD"
+    echo "JAVA_HOME = $JAVA_HOME"
+    echo "xnat_version = $xnat_version"
+    echo "xnat_repo = $xnat_repo"
+    echo "TOMCAT_HOME = $TOMCAT_HOME"
+    echo "db_name = $db_name"
+    echo "fix_psql_quotes = $fix_psql_quotes"
+    echo "data_dir = $data_dir"
+    for var in `awk -F= '{print $1}' "$conf_dir/vars"`
+    do
+        echo "$var = ${!var}"
+    done
+
+    return 0
+
+} # end dump_parameters()
+
 # ------------------------------------------------------------------
 
 progname=`basename $0`
@@ -193,20 +215,10 @@ check_tomcat
 
 echo "parameters are:"
 echo
-echo "    PGHOST = $PGHOST"
-echo "    PGUSER = $PGUSER"
-echo "    PGPASSWORD = $PGPASSWORD"
-echo "    JAVA_HOME = $JAVA_HOME"
-echo "    xnat_version = $xnat_version"
-echo "    xnat_repo = $xnat_repo"
-echo "    TOMCAT_HOME = $TOMCAT_HOME"
-echo "    db_name = $db_name"
-echo "    data_dir = $data_dir"
-for var in `awk -F= '{print $1}' "$conf_dir/vars"`
-do
-    echo "    $var = ${!var}"
-done
+dump_parameters | sed 's/^/    /'
 echo
+
+dump_parameters >&3
 
 echo "--- setting up build..."
 
@@ -218,6 +230,8 @@ mkdir "$data_dir/ftp"
 mkdir "$data_dir/cache"
 mkdir "$data_dir/archive"
 mkdir "$data_dir/prearchive"
+
+dump_parameters > "$log_dir/parameters"
 
 echo "--- getting source..."
 
@@ -272,7 +286,14 @@ sed 's/^[ \t]*<!--\(.*\)ext.xsd\(.*\)-->[ ]*$/\1ext.xsd\2/' \
 echo "--- deploying..."
 
 ./bin/update.sh -Ddeploy=true 2>&1 | tee $log_dir/update.out >&3
+
 if grep "BUILD FAILED" $log_dir/update.out > /dev/null
+then
+    echo "$progname: deploy failed" >&2
+    exit 0
+fi
+
+if grep "ERROR" $log_dir/update.out > /dev/null
 then
     echo "$progname: deploy failed" >&2
     exit 0
