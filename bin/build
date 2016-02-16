@@ -155,8 +155,8 @@ fi
 
 . $XNAT_INSTALLER_DIR/lib/common
 
-check_exported PGHOST PGUSER PGPASSWORD JAVA_HOME
-check_vars xnat_version TOMCAT_HOME db_name
+check_vars PGHOST PGUSER PGPASSWORD JAVA_HOME xnat_version TOMCAT_HOME db_name
+export PGHOST PGUSER PGPASSWORD JAVA_HOME
 
 if [ -d $log_dir ]
 then

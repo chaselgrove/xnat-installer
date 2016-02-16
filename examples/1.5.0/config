@@ -1,7 +1,7 @@
-export PGHOST=localhost
-export PGUSER=xnat
-export PGPASSWORD=xnat
-export JAVA_HOME=/usr/lib/jvm/default-java
+PGHOST=localhost
+PGUSER=xnat
+PGPASSWORD=xnat
+JAVA_HOME=/usr/lib/jvm/default-java
 TOMCAT_HOME=/var/lib/tomcat7
 data_dir_group=tomcat7
 
