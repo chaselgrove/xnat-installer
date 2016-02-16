@@ -92,7 +92,7 @@ then
     echo
     echo "options are:"
     echo
-    echo "    -v -- verbose"
+    echo "    -v -- verbose (equivalent to -V -)"
     echo
     echo "    -V <file> -- send verbose output to a file"
     echo
