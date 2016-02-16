@@ -1,0 +1,15 @@
+export PGHOST=localhost
+export PGUSER=xnat
+export PGPASSWORD=xnat
+export JAVA_HOME=/usr/lib/jvm/default-java
+TOMCAT_HOME=/var/lib/tomcat7
+data_dir_group=tomcat7
+
+xnat_version=1.5.4
+
+project_name=xnat-1.5.4
+db_name=xnat154
+
+xnat_repo=file:///media/sf_xnat
+
+# eof

@@ -1,0 +1,4 @@
+project_name
+require_login=false
+enable_new_registrations=false
+xnat_url=http://localhost:8080/$project_name
