@@ -1,0 +1,3 @@
+source=xnat_1_5_0.tar.gz
+extract_maven=1
+fix_psql_quotes=1
