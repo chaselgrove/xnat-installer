@@ -99,7 +99,7 @@ then
     exit 1
 fi
 
-if [ -z "XNAT_INSTALLER_DIR" ]
+if [ -z "$XNAT_INSTALLER_DIR" ]
 then
     echo "$progname: XNAT_INSTALLER_DIR is not set"
     exit 1
