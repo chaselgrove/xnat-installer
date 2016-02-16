@@ -1,8 +1,76 @@
-XNAT installer
+XNAT Installer
 
-tested on Ubuntu 14.0.3 LTS with:
+A package for installing various versions of XNAT.
+
+To use:
+
+    Set XNAT_INSTALLER_DIR to point to the directory containing bin/ and lib/.
+
+    Create a PostgreSQL user with CREATEDB and LOGIN permissions.
+
+    Run as a user with permissions to write to the tomcat webapps directory.  (This could be a user in the tomcat group; see data_dir_group below.)
+
+    Create a build configuration file called config and put it in an otherwise empty directory ($build_dir).
+
+    Run "bin/build $build_dir".
+
+"bin/clean $build_dir" undoes a build, removing the webapp (in $TOMCAT_HOME/webapps), dropping the database, and removing the build and data directories.
+
+The extension schema is included in the build.
+
+In builds of the 1.5 series, parts of .maven are overwritten by JARs from an XNAT-distributed zipfile.
+
+See examples/ for example build configurations.
+
+Build variables may be set in config in the build directory or at the command line.  The build script sources config, so variable declarations must take the form name=value (with no spaces around the "=" and a quoted value if it contains spaces).
+
+The following variables are used and (unless noted) must be definied if they have no default:
+
+    PGHOST -- The database host
+
+    PGUSER -- The database user
+
+    PGPASSWORD -- The password for the database user
+
+    db_name -- The name of the database.  This should not exist (it is created by build and dropped by clean)
+
+    JAVA_HOME -- JAVA_HOME as expected by the XNAT build.  This should contain bin/javac
+
+    xnat_version -- The version of XNAT to install
+
+    TOMCAT_HOME -- TOMCAT_HOME as expected by the XNAT build
+
+    xnat_repo -- The base URL for XNAT source downloads (may start with file:// for a local repository); default ftp://ftp.nrg.wustl.edu/pub/xnat/
+
+    data_dir -- The base directory for XNAT storage (data/, prearchive/, etc).  This is created by build and removed by clean.  The default is $build_dir/data.
+
+    data_dir_group -- The UNIX group for $data_dir and its descendants.  If not given, chgrp is not attempted.
+
+The following variables correspond to values in the build.properties files:
+
+    project_name -- xdat.project.name
+
+    mail_admin -- xdat.admin_email (1.5 series), xdat.mail.admin (1.6 series); default administrator@xnat.org
+
+    mail_prefix -- xdat.mail.prefix (1.6.2, 1.6.3, and 1.6.4)
+
+    require_login -- xdat.require_login; default false
+
+    enable_new_registrations -- xdat.enable_new_registrations; default false
+
+    xnat_url -- xnat.url; default http://localhost:8080/$project_name
+
+    site_title -- xnat.site.title (1.6 series only)
+
+    security_channel -- xdat.security.channel (1.6 series only); default any
+
+    enable_csrf_token -- xdat.enable_csrf_token (1.6 series only); default true
+
+XNAT Installer has been tested on Ubuntu 14.0.3 LTS with the following 
+packages installed:
 
     tomcat7
     postgresql-9.3
     openjdk-7-jdk
     openjdk-7-jre
+
