@@ -60,13 +60,14 @@ psql_()
 dump_parameters()
 {
 
+    echo "JAVA_HOME = $JAVA_HOME"
+    echo "TOMCAT_HOME = $TOMCAT_HOME"
+    echo "extract_maven = $extract_maven"
+    echo "xnat_version = $xnat_version"
+    echo "xnat_repo = $xnat_repo"
     echo "PGHOST = $PGHOST"
     echo "PGUSER = $PGUSER"
     echo "PGPASSWORD = $PGPASSWORD"
-    echo "JAVA_HOME = $JAVA_HOME"
-    echo "xnat_version = $xnat_version"
-    echo "xnat_repo = $xnat_repo"
-    echo "TOMCAT_HOME = $TOMCAT_HOME"
     echo "db_name = $db_name"
     echo "fix_psql_quotes = $fix_psql_quotes"
     echo "data_dir = $data_dir"
@@ -238,6 +239,13 @@ then
 fi
 
 dump_parameters > "$log_dir/parameters"
+
+if [ $extract_maven ]
+then
+    echo "--- unpacking maven JARs..."
+    maven_fname=`download xnat-maven.zip`
+    (cd ; unzip $maven_fname) >&3
+fi
 
 echo "--- getting source..."
 
