@@ -70,6 +70,7 @@ dump_parameters()
     echo "db_name = $db_name"
     echo "fix_psql_quotes = $fix_psql_quotes"
     echo "data_dir = $data_dir"
+    echo "data_dir_group = $data_dir_group"
     for var in `awk -F= '{print $1}' "$conf_dir/vars"`
     do
         echo "$var = ${!var}"
@@ -230,6 +231,11 @@ mkdir "$data_dir/ftp"
 mkdir "$data_dir/cache"
 mkdir "$data_dir/archive"
 mkdir "$data_dir/prearchive"
+
+if [ ! -z "$data_dir_group" ]
+then
+    chgrp -R $data_dir_group "$data_dir"
+fi
 
 dump_parameters > "$log_dir/parameters"
 
