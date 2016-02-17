@@ -60,7 +60,7 @@ The following variables correspond to values in the build.properties files:
 
     xnat_url -- xnat.url; default http://localhost:8080/$project_name
 
-    site_title -- xnat.site.title (1.6 series only)
+    site_title -- xnat.site.title (1.6.5 only)
 
     security_channel -- xdat.security.channel (1.6 series only); default any
 
