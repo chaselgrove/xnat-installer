@@ -19,7 +19,7 @@ create_build_properties()
     local xnat_dir="$2"
 
     # See <https://groups.google.com/d/msg/xnat_discussion/BwJ0xNMirF0/eRi1mFmMBwAJ>
-    sed -i "/maven.repo.remote=/c\maven.repo.remote=https://nrgxnat.artifactoryonline.com/nrgxnat/xnat-maven1" $build_dir/project.properties
+    sed -i "/maven.repo.remote=/c\maven.repo.remote=https://nrgxnat.artifactoryonline.com/nrgxnat/xnat-maven1" $xnat_dir/project.properties
 
     cat $build_dir/build.properties.template \
         | sed "s|%data_dir%|$data_dir|" \
